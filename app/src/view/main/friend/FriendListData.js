@@ -1,21 +1,19 @@
 import React from 'react';
-import axios from 'axios';
 import {ScrollView, StyleSheet, Text, View, Dimensions, Image} from 'react-native';
-import {SERVER_URL} from "../../../constant/HttpProperty";
 import {observable} from "mobx";
-
-const TARGET_URL = SERVER_URL + '/users';
+import * as friendListFile from './getUserRepository';
 
 export default class FriendListData extends React.Component {
     @observable state = {
+        iconSrc:'https://cdn4.iconfinder.com/data/icons/forgen-phone-settings/48/setting-512.png',
         info: []
     }
     componentDidMount() {
-        axios.get(TARGET_URL + '/auth', {}).then(res=>{
-                this.setState({info: res.data});
+        friendListFile.getData().then(res=>{
+            this.setState({info: res.data});
+            console.log(res.data);
         });
     }
-    iconSrc = 'https://cdn4.iconfinder.com/data/icons/forgen-phone-settings/48/setting-512.png'
     render() {
         return (
             <View style={styles.contentContainer}>
@@ -26,7 +24,7 @@ export default class FriendListData extends React.Component {
                                 <Image source={{uri: item.representProfileImage}} style={styles.friendImage}/>
                                 <View style={styles.friendBody}>
                                     <Text style={styles.name}>{item.name}</Text>
-                                    <Image source={{uri:this.iconSrc}} style={styles.icon}/>
+                                    <Image source={{uri:this.state.iconSrc}} style={styles.icon}/>
                                 </View>
                                 <View style={styles.friendMusic}>
                                     <Text style={styles.description}>{item.email}</Text>
